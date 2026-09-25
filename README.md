@@ -41,7 +41,7 @@ Le dossier `data/` n'est pas pousse sur GitHub (voir `.gitignore`).
 
 ## Verification du GPU
 
-Le notebook affiche au debut de l'execution le device utilise (`cuda` si un GPU est disponible, sinon `cpu`). Sur ce projet, le device detecte etait : `cuda` / `cpu` (a completer apres execution).
+Le notebook affiche au debut de l'execution le device utilise (`cuda` si un GPU est disponible, sinon `mps` sur Mac Apple Silicon, sinon `cpu`). Sur cette execution, le device detecte etait `cuda` (GPU T4 sur Google Colab).
 
 ## Commandes pour entrainer
 
@@ -63,20 +63,20 @@ et evalue les deux modeles sur le jeu de test.
 
 ## Resultats
 
-_A completer apres execution : tableau et courbes loss / accuracy / precision / recall pour les deux experiences._
+| Modele | Val accuracy | Val precision | Val recall | Test accuracy | Test precision | Test recall |
+|---|---|---|---|---|---|---|
+| CNN from scratch | 0.778 | 0.915 | 0.615 | 0.774 | 0.913 | 0.606 |
+| Transfert learning (ResNet18) | 0.919 | 0.934 | 0.902 | 0.913 | 0.929 | 0.894 |
 
-| Modele | Val accuracy | Val precision | Val recall | Test accuracy |
-|---|---|---|---|---|
-| CNN from scratch | | | | |
-| Transfert learning (ResNet18) | | | | |
+**Analyse :**
 
-**Analyse (2 a 3 paragraphes) :**
+Le modele en transfert learning converge beaucoup plus vite que le CNN from scratch : il atteint 91.5% d'accuracy en validation deja a la premiere epoque, alors que le CNN from scratch plafonne a 77.8% apres 6 epoques completes. Cela s'explique par le pre-entrainement sur ImageNet : ResNet18 sait deja reconnaitre des formes et textures generiques, il n'a qu'a apprendre a les combiner pour separer chats et chiens.
 
-_A completer : quel modele converge le plus vite et pourquoi, quel modele a les meilleures metriques finales, ce que montrent les matrices de confusion._
+Sur le jeu de test, le transfert learning devance nettement le CNN from scratch sur toutes les metriques (91.3% contre 77.4% d'accuracy). La precision est proche entre les deux modeles, mais l'ecart se voit surtout sur le recall (89.4% contre 60.6%) : le CNN from scratch rate une bonne partie des vrais positifs d'une des deux classes, alors que le modele pre-entraine est a la fois precis et complet.
 
 ## Limites et pistes d'amelioration
 
-_A completer brievement : taille du jeu de donnees, surapprentissage observe, temps d'entrainement, pistes (fine-tuning des dernieres couches du ResNet, autres architectures, plus d'augmentation de donnees...)._
+Le CNN from scratch n'a ete entraine que sur 6 epoques, ce qui limite sa performance face a un modele pre-entraine. Son recall plus faible suggere un desequilibre dans ses predictions qui pourrait etre corrige avec plus d'epoques ou un ajustement du seuil de decision. Pour le transfert learning, une piste d'amelioration serait de degeler et d'affiner (fine-tuner) les dernieres couches du ResNet18 plutot que de n'entrainer que la tete de classification.
 
 ## Reproductibilite
 
