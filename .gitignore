@@ -1,0 +1,11 @@
+Cat_Dog_data/
+data/
+__MACOSX/
+*.pt
+*.pth
+checkpoints/
+runs/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.DS_Store
